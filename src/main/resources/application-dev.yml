@@ -1,0 +1,10 @@
+spring:
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017
+            database: testdb
+    profiles:
+        active: dev
+
+sample:
+    value: dev        
