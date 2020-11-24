@@ -33,23 +33,16 @@ applicaton.properties => application.yml
 spring:
     data:
         mongodb:
-            uri: mongodb://mongodb_compose:27017
+            uri: mongodb://localhost:27017
             database: testdb
+sample:
+    value: default
 ```
 
-
->docker pull mongo
-
->docker create -v D:\Work\mongodb\db:/data/db --name mongodb -p 27017:27017 -it mongo:latest
-
->>WSL2를 사용하여 /mnt/d/Work/mongodb/db로 volume설정을 해보았지만 시작시 에러 발생 하여 윈도우 폴더 명으로 맵핑한다.
-
->docker start mongodb_server
-
 >.\gradlew.bat build
+>.\gradlew.bat bootBuildImage --imageName=philosup/demo
 
 >docker build -t philosup/demo .
-
 ```yml
 version: "3"
 services:
@@ -59,12 +52,14 @@ services:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
     volumes:
-      - D:\Work\mongodb\db:/data/db
+      - ./mongodb:/data/db
     container_name: "mongodb_compose"
     ports:
     - 27017:27017
   app:
-    image: philosup/demo
+    image: docker.io/philosup/demo:latest
     ports:
     - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
 ```
