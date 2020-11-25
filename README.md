@@ -40,6 +40,7 @@ sample:
 ```
 
 >.\gradlew.bat build
+
 >.\gradlew.bat bootBuildImage --imageName=philosup/demo
 
 >docker build -t philosup/demo .

@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'com.data.alliance'
+group = 'com.philosup'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -19,6 +19,10 @@ repositories {
 }
 
 dependencies {
+	testImplementation("org.testcontainers:testcontainers:1.15.0")
+	testCompile("org.testcontainers:mongodb:1.15.0")
+	// testImplementation("org.testcontainers:junit-jupiter")
+
 	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	// implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -30,6 +34,8 @@ dependencies {
 
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+	implementation 'com.google.code.gson:gson:2.8.6'
 }
 
 test {
