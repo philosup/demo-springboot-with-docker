@@ -13,11 +13,14 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.dataaliance.icon.IconRpcManager;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
+import com.philosup.demo.data.TransactionData;
 
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,36 +61,54 @@ public class TransactionFromTracker {
                 .toString();
     }
 
-    public ICONTransactionResult getTransactionResult(String txHash) throws Throwable {
-        Map<String, String> headers = new HashMap();
-        headers.put("nid", "0x1");
-        JsonRpcHttpClient client = new JsonRpcHttpClient(new URL("http://54.180.120.65:9080/api/v3/1"), headers);
+    // public ICONTransactionResult getTransactionResult(String txHash) throws Throwable {
+    //     Map<String, String> headers = new HashMap();
+    //     headers.put("nid", "0x1");
+    //     JsonRpcHttpClient client = new JsonRpcHttpClient(new URL("http://54.180.120.65:9080/api/v3/1"), headers);
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("txHash", txHash);
-        return client.invoke("icx_getTransactionResult", params, ICONTransactionResult.class);
-    }
+    //     Map<String, Object> params = new HashMap<String, Object>();
+    //     params.put("txHash", txHash);
+    //     return client.invoke("icx_getTransactionResult", params, ICONTransactionResult.class);
+    // }
 
-    public Object getTransaction(String txHash) throws Throwable {
-        Map<String, String> headers = new HashMap();
-        headers.put("nid", "0x1");
-        JsonRpcHttpClient client = new JsonRpcHttpClient(new URL("http://54.180.120.65:9080/api/v3/1"), headers);
+    // public ICONTransaction getTransaction(String txHash) throws Throwable {
+    //     Map<String, String> headers = new HashMap();
+    //     headers.put("nid", "0x1");
+    //     JsonRpcHttpClient client = new JsonRpcHttpClient(new URL("http://54.180.120.65:9080/api/v3/1"), headers);
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("txHash", txHash);
+    //     Map<String, Object> params = new HashMap<String, Object>();
+    //     params.put("txHash", txHash);
         
-        return client.invoke("icx_getTransactionByHash", params, Object.class);
-    }
+    //     return client.invoke("icx_getTransactionByHash", params, ICONTransaction.class);
+    // }
 
     @GetMapping("/hash")
     public String getTxHash(@RequestParam("hash") String txHash) throws Throwable {
-        StringBuffer res = new StringBuffer();
-        var gson = new Gson();
-        res.append('[');
-        res.append(gson.toJson(getTransaction(txHash))).append(',');
-        res.append(getTransactionResult(txHash).toString());
-        res.append(']');
-        return res.toString();
+
+        var rpcManager = new IconRpcManager();
+        var transaction = rpcManager.getTransaction(txHash);
+        var result = rpcManager.getTransactionResult(txHash);
+
+        var trData = new TransactionData();
+        trData.nid = rpcManager.nid;
+        trData.txHash = txHash;
+        trData.transaction = transaction;
+        trData.result = result;
+
+        return trData.toString();
+
+        // var gson = new Gson();
+        // JsonObject obj = new JsonObject();
+        // obj.add("transaction", gson.fromJson(getTransaction(txHash).toString(), JsonObject.class));
+        // obj.add("result", gson.fromJson(getTransactionResult(txHash).toString(), JsonObject.class));
+        // return obj.toString();
+
+        // StringBuffer res = new StringBuffer();
+        // res.append('[');
+        // res.append(gson.toJson(getTransaction(txHash))).append(',');
+        // res.append(getTransactionResult(txHash).toString());
+        // res.append(']');
+        // return res.toString();
     }
 
     @GetMapping("/all")
@@ -231,7 +252,7 @@ public class TransactionFromTracker {
         pmt.makeTree();
         String paymentMerkleRoot = pmt.getMerkleRoot();
 
-        String paymentTXHash;
+        String paymentTXHash = "";
         var renewalPMRSCSDK = new RenewalPMRSCSDK();
         // 3. generate & send payment TX
         if (renewalPMRSCSDK.isMerkleRootExistedCall(paymentMerkleRoot).equals("1")) {

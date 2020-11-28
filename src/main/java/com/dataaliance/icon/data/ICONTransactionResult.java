@@ -1,21 +1,12 @@
-package com.philosup.demo;
+package com.dataaliance.icon.data;
 
-import java.math.BigInteger;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
-import org.bson.json.JsonReader;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "transaction")
 public class ICONTransactionResult {
 	public String status;
     public String to;
-    @Id
 	public String txHash;
 	public String txIndex;
 	public String blockHeight;
@@ -24,8 +15,8 @@ public class ICONTransactionResult {
 	public String stepUsed;
 	public String stepPrice;
 	public String scoreAddress;
-	public String logsBloom;
 	public List<EventLog> eventLogs;
+	public String logsBloom;
 	public Failure failure;
 
 	@Override

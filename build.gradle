@@ -38,6 +38,11 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation 'com.github.briandilley.jsonrpc4j:jsonrpc4j:1.5.3'
     implementation 'foundation.icon:icon-sdk:1.0.0'
+	implementation 'com.squareup.okhttp3:okhttp:4.3.1'
+
+
+	compile group: 'org.bouncycastle', name: 'bcprov-ext-jdk14', version: '1.49'
+	//Thanks for using https://jar-download.com
 
 }
 
