@@ -12,7 +12,8 @@ class DemoApplicationTests {
 
 	@Test
 	public void printAccountData(){
-		System.out.println(accountRepository.findAll().toString());
+		System.out.println("x");
+		// System.out.println(accountRepository.findAll().toString());
 	}
 	// TestRestTemplate testRestTemplate;
 

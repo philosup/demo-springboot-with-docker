@@ -11,19 +11,25 @@ import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 
 public class IconRpcManager {
 
-    public String url = "http://54.180.120.65:9080/api/v3/";
-    public int nid = 1;
-    public JsonRpcHttpClient client = null;
+    private String url = "http://54.180.120.65:9080/api/v3/";
+    private JsonRpcHttpClient client = null;
 
-    public IconRpcManager() throws MalformedURLException {
-        initClient(nid);
+    private int nid = 1;
+
+    public int getNID(){
+        return nid;
+    }
+
+    public IconRpcManager(int nid) throws MalformedURLException {
+        this.nid = nid;
+        initClient();
     }
 
     public URL getNodeUrl(int nid) throws MalformedURLException {
         return new URL(url + Integer.toString(nid));
     }
 
-    public void initClient(int nid) throws MalformedURLException
+    protected void initClient() throws MalformedURLException
     {
         Map<String, String> headers = new HashMap();
         headers.put("nid", Integer.toHexString(nid));
@@ -38,8 +44,7 @@ public class IconRpcManager {
 
     public ICONTransaction getTransaction(String txHash) throws Throwable {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("txHash", txHash);
-        
+        params.put("txHash", txHash);        
         return client.invoke("icx_getTransactionByHash", params, ICONTransaction.class);
     }    
 }

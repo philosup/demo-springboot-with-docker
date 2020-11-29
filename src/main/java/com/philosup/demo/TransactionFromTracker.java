@@ -82,38 +82,9 @@ public class TransactionFromTracker {
     //     return client.invoke("icx_getTransactionByHash", params, ICONTransaction.class);
     // }
 
-    @GetMapping("/hash")
-    public String getTxHash(@RequestParam("hash") String txHash) throws Throwable {
-
-        var rpcManager = new IconRpcManager();
-        var transaction = rpcManager.getTransaction(txHash);
-        var result = rpcManager.getTransactionResult(txHash);
-
-        var trData = new TransactionData();
-        trData.nid = rpcManager.nid;
-        trData.txHash = txHash;
-        trData.transaction = transaction;
-        trData.result = result;
-
-        return trData.toString();
-
-        // var gson = new Gson();
-        // JsonObject obj = new JsonObject();
-        // obj.add("transaction", gson.fromJson(getTransaction(txHash).toString(), JsonObject.class));
-        // obj.add("result", gson.fromJson(getTransactionResult(txHash).toString(), JsonObject.class));
-        // return obj.toString();
-
-        // StringBuffer res = new StringBuffer();
-        // res.append('[');
-        // res.append(gson.toJson(getTransaction(txHash))).append(',');
-        // res.append(getTransactionResult(txHash).toString());
-        // res.append(']');
-        // return res.toString();
-    }
-
     @GetMapping("/all")
     public String getTxs() throws Exception {
-        URL url = new URL("http://15.164.184.105:8080/rest/v1/transactions?scaleNum=60000");
+        URL url = new URL("http://15.164.184.105:8080/rest/v1/transactions?scaleNum=60");
 
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
